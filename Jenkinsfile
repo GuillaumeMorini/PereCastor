@@ -55,7 +55,7 @@ node('node') {
          echo 'Push to Repo'
          sh './dockerPushToRepo.sh'
 
-         echo 'ssh to laptop and update deployment '
+         echo 'ssh to laptop and update deployment'
          echo 'ssh deploy@192.168.65.2 kubectl get po -n sock-shop'
 
        }
