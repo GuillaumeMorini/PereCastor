@@ -55,8 +55,8 @@ node('node') {
          echo 'Push to Repo'
          sh './dockerPushToRepo.sh'
 
-         echo 'ssh to web server and tell it to pull new image'
-         sh 'ssh deploy@xxxxx.xxxxx.com running/xxxxxxx/dockerRun.sh'
+         echo 'ssh to laptop and update deployment'
+         echo 'ssh deploy@192.168.65.2 kubectl get po -n sock-shop'
 
        }
 
@@ -65,10 +65,10 @@ node('node') {
          echo 'prune and cleanup'
 
          mail body: 'project build successful',
-                     from: 'xxxx@yyyyy.com',
-                     replyTo: 'xxxx@yyyy.com',
+                     from: 'jenkins@cisco.com',
+                     replyTo: 'gmorini@cisco.com',
                      subject: 'project build successful',
-                     to: 'yyyyy@yyyy.com'
+                     to: 'gmorini@cisco.com'
        }
 
 
@@ -79,10 +79,10 @@ node('node') {
         currentBuild.result = "FAILURE"
 
             mail body: "project build error is here: ${env.BUILD_URL}" ,
-            from: 'xxxx@yyyy.com',
-            replyTo: 'yyyy@yyyy.com',
+            from: 'jenkins@cisco.com',
+            replyTo: 'gmorini@cisco.com',
             subject: 'project build failed',
-            to: 'zzzz@yyyyy.com'
+            to: 'gmorini@cisco.com'
 
         throw err
     }
