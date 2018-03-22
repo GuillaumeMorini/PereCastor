@@ -31,6 +31,9 @@ node('node') {
 
     try {
 
+                docker.withRegistry("https://${registryAddress}", '${credentialsId}'){
+                     newImage.push("${variables.version}")
+
        stage('Checkout'){
 
           checkout scm
@@ -46,23 +49,21 @@ node('node') {
        }
 
        stage('Build Docker'){
-
-            sh './dockerBuild.sh'
+          print "Install docker"
+          sh 'apt-get update'
+          sh 'apt-get install -y docker.io"
+          print "Build Image "
+          def monImg = docker.build("guismo/front-end:0.3.12", 'front-end')
        }
 
        stage('Deploy'){
-
-         echo 'Push to Repo'
-         withCredentials([usernamePassword(credentialsId: 'docker_login', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-            sh '''
-              #set +x 
-              echo "docker login" $DOCKER_USER $DOCKER_PASS
-              ./dockerPushToRepo.sh $DOCKER_USER $DOCKER_PASS
-            '''
+         print 'Push to Repo'
+         docker.withRegistry("https://${registryAddress}", '${docker_login}'){
+            monImage.push("${variables.version}")
          }
 
-         echo 'ssh to laptop and update deployment'
-         echo 'ssh deploy@192.168.65.2 kubectl get po -n sock-shop'
+         print 'ssh to laptop and update deployment'
+         print 'ssh deploy@192.168.65.2 kubectl get po -n sock-shop'
 
        }
 
