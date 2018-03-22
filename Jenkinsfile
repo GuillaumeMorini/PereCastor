@@ -59,9 +59,14 @@ node('node') {
        }
 
        stage('Deploy'){
-
-         print 'ssh to laptop and update deployment'
-         print 'ssh deploy@192.168.65.2 kubectl get po -n sock-shop'
+         print "Install sshpass"
+         sh 'apt-get install -y sshpass'
+         withCredentials([usernamePassword(credentialsId: 'ssh_login', usernameVariable: 'SSH_USER', passwordVariable: 'SSH_PASS')]) {
+            sh '''
+              print 'ssh to laptop and update deployment'
+              print 'sshpass -p $SSH_PASS $SSH_USER@192.168.65.2 kubectl get po -n sock-shop'
+            '''
+         }
 
        }
 
