@@ -55,7 +55,8 @@ node('node') {
          echo 'Push to Repo'
          withCredentials([usernamePassword(credentialsId: 'docker_login', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
             sh '''
-              set +x 
+              #set +x 
+              echo "docker login" $DOCKER_USER $DOCKER_PASS
               ./dockerPushToRepo.sh $DOCKER_USER $DOCKER_PASS
             '''
          }
