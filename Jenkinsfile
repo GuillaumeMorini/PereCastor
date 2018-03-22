@@ -31,9 +31,6 @@ node('node') {
 
     try {
 
-                docker.withRegistry("https://${registryAddress}", '${credentialsId}'){
-                     newImage.push("${variables.version}")
-
        stage('Checkout'){
 
           checkout scm
