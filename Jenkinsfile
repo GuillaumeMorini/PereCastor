@@ -50,13 +50,13 @@ node('node') {
           sh 'apt-get update'
           sh 'apt-get install -y docker.io'
           print "Build Image "
-          def monImg = docker.build("guismo/front-end:0.3.12", 'front-end')
+          docker.build("guismo/front-end:0.3.12", 'front-end')
        }
 
        stage('Deploy'){
          print 'Push to Repo'
          docker.withRegistry("https://index.docker.io/v1/", 'docker_login'){
-            monImg.push()
+            docker.push("guismo/front-end:0.3.12")
          }
 
          print 'ssh to laptop and update deployment'
