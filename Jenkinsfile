@@ -51,7 +51,7 @@ node('node') {
        stage('Build Docker'){
           print "Install docker"
           sh 'apt-get update'
-          sh 'apt-get install -y docker.io"
+          sh 'apt-get install -y docker.io'
           print "Build Image "
           def monImg = docker.build("guismo/front-end:0.3.12", 'front-end')
        }
