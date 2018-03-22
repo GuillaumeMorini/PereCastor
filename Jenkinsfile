@@ -64,7 +64,7 @@ node('node') {
          withCredentials([usernamePassword(credentialsId: 'ssh_login', usernameVariable: 'SSH_USER', passwordVariable: 'SSH_PASS')]) {
             sh '''
               echo 'ssh to laptop and update deployment'
-              sshpass -p $SSH_PASS $SSH_USER@192.168.65.2 kubectl get po -n sock-shop
+              sshpass -p $SSH_PASS ssh -oStrictHostKeyChecking=no $SSH_USER@192.168.65.2 kubectl get po -n sock-shop
             '''
          }
 
