@@ -46,9 +46,9 @@ node('node') {
        }
 
        stage('Build Docker & Push'){
-          // print "Install docker"
-          // sh 'apt-get update'
-          // sh 'apt-get install -y docker.io'
+          print "Install docker"
+          sh 'apt-get update'
+          sh 'apt-get install -y docker.io'
           print "Connect to Registry "
           docker.withRegistry("https://index.docker.io/v1/", 'docker_login'){
             print "Build Image "
