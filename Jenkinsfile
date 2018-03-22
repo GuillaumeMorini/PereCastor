@@ -55,7 +55,7 @@ node('node') {
 
        stage('Deploy'){
          print 'Push to Repo'
-         docker.withRegistry("https://${registryAddress}", '${docker_login}'){
+         docker.withRegistry("https://index.docker.io/v1/", '${docker_login}'){
             monImage.push("${variables.version}")
          }
 
