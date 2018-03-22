@@ -53,7 +53,12 @@ node('node') {
        stage('Deploy'){
 
          echo 'Push to Repo'
-         sh './dockerPushToRepo.sh'
+         withCredentials([usernamePassword(credentialsId: 'docker_login', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+            sh '''
+              set +x 
+              ./dockerPushToRepo.sh $DOCKER_USER $DOCKER_PASS
+            '''
+         }
 
          echo 'ssh to laptop and update deployment'
          echo 'ssh deploy@192.168.65.2 kubectl get po -n sock-shop'
