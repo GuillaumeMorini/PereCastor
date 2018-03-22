@@ -45,19 +45,20 @@ node('node') {
          sh './test.sh'
        }
 
-       stage('Build Docker'){
-          print "Install docker"
-          sh 'apt-get update'
-          sh 'apt-get install -y docker.io'
-          print "Build Image "
-          def pcImg = docker.build("guismo/front-end:0.3.12", 'front-end')
+       stage('Build Docker & Push'){
+          #print "Install docker"
+          #sh 'apt-get update'
+          #sh 'apt-get install -y docker.io'
+          print "Connect to Registry "
+          docker.withRegistry("https://index.docker.io/v1/", 'docker_login'){
+            print "Build Image "
+            def pcImg = docker.build("guismo/front-end:0.3.12", 'front-end')
+            print 'Push to Repo'
+            pcImg.push()
+          }
        }
 
        stage('Deploy'){
-         print 'Push to Repo'
-         docker.withRegistry("https://index.docker.io/v1/", 'docker_login'){
-            pcImg.push()
-         }
 
          print 'ssh to laptop and update deployment'
          print 'ssh deploy@192.168.65.2 kubectl get po -n sock-shop'
