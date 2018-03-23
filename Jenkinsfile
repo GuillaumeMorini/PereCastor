@@ -52,7 +52,7 @@ node('node') {
           print "Connect to Registry "
           docker.withRegistry("https://index.docker.io/v1/", 'docker_login'){
             print "Build Image "
-            def pcImg = docker.build("guismo/front-end:0.3.12", 'front-end')
+            def pcImg = docker.build("guismo/front-end:${env.BUILD_ID}", 'front-end')
             print 'Push to Repo'
             pcImg.push()
           }
@@ -64,9 +64,9 @@ node('node') {
          withCredentials([usernamePassword(credentialsId: 'ssh_login', usernameVariable: 'SSH_USER', passwordVariable: 'SSH_PASS')]) {
             sh '''
               echo 'ssh to laptop and update deployment'
-              sshpass -p $SSH_PASS ssh -oStrictHostKeyChecking=no $SSH_USER@192.168.65.2 /Users/gmorini/Downloads/google-cloud-sdk/bin/kubectl -n sock-shop scale deploy front-end --replicas=0
-              sleep 5
-              sshpass -p $SSH_PASS ssh -oStrictHostKeyChecking=no $SSH_USER@192.168.65.2 /Users/gmorini/Downloads/google-cloud-sdk/bin/kubectl -n sock-shop scale deploy front-end --replicas=1
+              sshpass -p $SSH_PASS ssh -oStrictHostKeyChecking=no $SSH_USER@192.168.65.2 cp complete-demo.yaml patch.yaml
+              sshpass -p $SSH_PASS ssh -oStrictHostKeyChecking=no $SSH_USER@192.168.65.2 rpl "guismo/front-end:0.3.12" "guismo/front-end:${env.BUILD_ID}" patch.yaml
+              sshpass -p $SSH_PASS ssh -oStrictHostKeyChecking=no $SSH_USER@192.168.65.2 /Users/gmorini/Downloads/google-cloud-sdk/bin/kubectl -n sock-shop apply -f patch.yaml
             '''
          }
 
