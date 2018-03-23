@@ -68,7 +68,7 @@ node('node') {
             print "Build ID: ${env.BUILD_ID}"
             sh "sshpass -p $SSH_PASS ssh -oStrictHostKeyChecking=no $SSH_USER@192.168.65.2 /usr/local/bin/rpl \"guismo/front-end:0.3.12\" \"guismo/front-end:${env.BUILD_ID}\" PereCastor/patch.yaml"
             print "Before apply"
-            sh "sshpass -p $SSH_PASS ssh -oStrictHostKeyChecking=no $SSH_USER@192.168.65.2 /Users/gmorini/Downloads/google-cloud-sdk/bin/kubectl -n sock-shop apply -f PereCastor/patch.yaml"
+            sh "sshpass -p $SSH_PASS ssh -oStrictHostKeyChecking=no $SSH_USER@192.168.65.2 /Users/gmorini/Downloads/google-cloud-sdk/bin/kubectl -n shop apply -f PereCastor/patch.yaml"
          }
 
        }
