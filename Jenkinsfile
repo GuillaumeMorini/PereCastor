@@ -65,7 +65,10 @@ node('node') {
             sh '''
               echo 'ssh to laptop and update deployment'
               sshpass -p $SSH_PASS ssh -oStrictHostKeyChecking=no $SSH_USER@192.168.65.2 cp PereCastor/complete-demo.yaml PereCastor/patch.yaml
+              echo "display build id"
+              echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
               sshpass -p $SSH_PASS ssh -oStrictHostKeyChecking=no $SSH_USER@192.168.65.2 rpl "guismo/front-end:0.3.12" "guismo/front-end:${env.BUILD_ID}" PereCastor/patch.yaml
+              echo "Running ${env.BUILD_ID} on ${env.JENKINS_URL}"
               sshpass -p $SSH_PASS ssh -oStrictHostKeyChecking=no $SSH_USER@192.168.65.2 /Users/gmorini/Downloads/google-cloud-sdk/bin/kubectl -n sock-shop apply -f PereCastor/patch.yaml
             '''
          }
